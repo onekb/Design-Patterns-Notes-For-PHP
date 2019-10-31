@@ -1,7 +1,12 @@
 <?php
 
+interface report
+{
+    public function preocess();
+}
+
 //版主
-class Moderator
+class Moderator implements report
 {
     protected $level = 'warning'; //等级 警告
     protected $top = 'Admin'; //上级 Admin管理员
@@ -18,7 +23,7 @@ class Moderator
 }
 
 //管理员
-class Admin
+class Admin implements report
 {
     protected $level = 'sanction'; //等级 制裁
     protected $top = 'Police'; //上级 Police警察
@@ -35,7 +40,7 @@ class Admin
 }
 
 //警察
-class Police
+class Police implements report
 {
     protected $level = 'serious'; //等级 严重
     protected $top = ''; //上级 暂无 如果以后有 可以继续延伸
