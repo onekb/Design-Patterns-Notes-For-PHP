@@ -249,3 +249,88 @@ $pay->pay($orderData); //调用统一支付
 $pay->queueWithdrawal($orderData); //调用队列提醒
 
 ```
+
+---
+
+# 结构型
+
+## 装饰器模式
+
+适用于需要一层层包装的内容。可以理解为穿衣服，最初创建的类就是裸体的，之后的每一步操作都是往上面穿衣服。也有点像《贪吃蛇》，每吃一块都会组成身体的一部分。
+
+下面为代码示例
+
+```php
+<?php
+
+//部件
+interface Component
+{
+    public function operation(): string;
+}
+
+//具体部件 人
+class People implements Component
+{
+    public function operation(): string
+    {
+        return "裸体 人";
+    }
+}
+
+//基础装饰 衣服
+class Clothes implements Component
+{
+    protected $component;
+
+    public function __construct(Component $component)
+    {
+        $this->component = $component;
+    }
+
+    public function operation(): string
+    {
+        return $this->component->operation();
+    }
+}
+
+//具体装饰 T恤
+class TShirtClothes extends Clothes
+{
+    public function operation(): string
+    {
+        return "T恤(" . parent::operation() . ")";
+    }
+}
+
+//具体装饰 外套
+class CoatClothes extends Clothes
+{
+    public function operation(): string
+    {
+        return "外套(" . parent::operation() . ")";
+    }
+}
+
+//客户端
+function clientCode(Component $component)
+{
+    // 业务代码
+
+    echo "你穿着的是: " . $component->operation();
+
+    // 业务代码
+}
+
+//简单调用 没有装饰器
+//实例化
+$simple = new People;
+clientCode($simple);
+
+//装饰器调用
+$simple = new People;
+$tShirtClothes = new TShirtClothes($simple);
+$coatClothes = new CoatClothes($tShirtClothes);
+clientCode($coatClothes);
+
+```
